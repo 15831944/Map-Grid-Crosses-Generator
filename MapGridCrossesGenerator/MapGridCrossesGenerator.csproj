@@ -60,10 +60,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\IPoint.cs" />
+    <Compile Include="Helpers\BlockHelper.cs" />
     <Compile Include="MapGridCrossesGenerator.cs" />
     <Compile Include="Map\MapGrid.cs" />
     <Compile Include="Map\Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Map_Grid_Cross.dwg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

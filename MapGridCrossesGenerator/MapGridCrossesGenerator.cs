@@ -14,6 +14,32 @@
             Database database = HostApplicationServices.WorkingDatabase;
             Editor editor = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument.Editor;
 
+            using (Database sourceDatabase = new Database(false, true))
+            {
+                sourceDatabase.ReadDwgFile("Resources//Map_Grid_Cross.dwg", System.IO.FileShare.ReadWrite, true, "");
+
+                ObjectIdCollection ids = new ObjectIdCollection();
+                using (Transaction sourceTransaction = sourceDatabase.TransactionManager.StartTransaction())
+                {
+                    BlockTable bt = (BlockTable)sourceTransaction.GetObject(sourceDatabase.BlockTableId, OpenMode.ForRead);
+
+                    if (bt.Has("MAP-GRID-CROSS"))
+                    {
+                        ids.Add(bt["MAP-GRID-CROSS"]);
+                    }
+
+                    sourceTransaction.Commit();
+                }
+
+                if (ids.Count != 0)
+                {
+                    IdMapping iMap = new IdMapping();
+
+                    database.WblockCloneObjects(ids, database.BlockTableId, iMap, DuplicateRecordCloning.Ignore, false);
+                }
+
+            }
+
             PromptIntegerOptions promptIntegerOptions = new PromptIntegerOptions("Въведете мащаб: ")
             {
                 DefaultValue = 1000,
@@ -61,15 +87,22 @@
 
             using (Transaction transaction = database.TransactionManager.StartTransaction())
             {
-                BlockTable blockTable = (BlockTable)transaction.GetObject(database.BlockTableId, OpenMode.ForRead);
-                BlockTableRecord blockTableRecord = (BlockTableRecord)transaction.GetObject(blockTable[BlockTableRecord.ModelSpace], OpenMode.ForWrite);
+                BlockTable blockTable = database.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
+                BlockTableRecord blockDefinition = blockTable["MAP-GRID-CROSS"].GetObject(OpenMode.ForWrite) as BlockTableRecord;
+                BlockTableRecord modelSpaceBlockTableRecord = blockTable[BlockTableRecord.ModelSpace].GetObject(OpenMode.ForWrite) as BlockTableRecord;
 
                 foreach (var cross in crosses)
                 {
-                    DBPoint point = new DBPoint(new Point3d(cross.X, cross.Y, 0));
+                    Point3d blockReferenceInsertPoint = new Point3d(cross.X, cross.Y, 0);
 
-                    blockTableRecord.AppendEntity(point);
-                    transaction.AddNewlyCreatedDBObject(point, true);
+                    using (BlockReference blockReference = new BlockReference(blockReferenceInsertPoint, blockDefinition.ObjectId))
+                    {
+                        blockReference.ScaleFactors = new Scale3d(scale / 1000.0);
+
+                        modelSpaceBlockTableRecord.AppendEntity(blockReference);
+
+                        transaction.AddNewlyCreatedDBObject(blockReference, true);
+                    }
                 }
 
                 transaction.Commit();
