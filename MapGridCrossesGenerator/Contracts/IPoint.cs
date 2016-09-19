@@ -3,9 +3,9 @@
     using System;
     using System.Linq;
 
-    interface IPoint
+    public interface IPoint
     {
-        double X { get; }
-        double Y { get; }
+        int X { get; }
+        int Y { get; }
     }
 }

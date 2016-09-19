@@ -1,8 +1,6 @@
 ﻿namespace MapGridCrossesGenerator.Map
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Contracts;
 
     public static class MapGrid
@@ -24,11 +22,13 @@
             int limitX = (int)upperRightPoint.X + upperRigthPointReductionX;
             int limitY = (int)upperRightPoint.Y + upperRigthPointReductionY;
 
-            for (int i = originX; i <= limitX; i += gridSize)
+            for (int x = originX; x <= limitX; x += gridSize)
             {
-                for (int j = originY; j <= limitY; j += gridSize)
+                for (int y = originY; y <= limitY; y += gridSize)
                 {
+                    Point cross = new Point(x,y);
 
+                    crosses.Add(cross);
                 }
             }
 
