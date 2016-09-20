@@ -5,6 +5,8 @@
     using Autodesk.AutoCAD.Geometry;
     using Autodesk.AutoCAD.Runtime;
     using Map;
+    using System.IO;
+    using System.Reflection;
 
     public class MapGridCrossesGenerator
     {
@@ -16,7 +18,9 @@
 
             using (Database sourceDatabase = new Database(false, true))
             {
-                sourceDatabase.ReadDwgFile("Resources//Map_Grid_Cross.dwg", System.IO.FileShare.ReadWrite, true, "");
+                string mapGridCrossFilePath = string.Format("{0}{1}Resources{1}Map_Grid_Cross.dwg", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Path.DirectorySeparatorChar);
+
+                sourceDatabase.ReadDwgFile(mapGridCrossFilePath, FileShare.ReadWrite, true, "");
 
                 ObjectIdCollection ids = new ObjectIdCollection();
                 using (Transaction sourceTransaction = sourceDatabase.TransactionManager.StartTransaction())
