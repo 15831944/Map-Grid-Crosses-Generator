@@ -65,6 +65,13 @@
 
             Point3d upperRightPoint = promptUpperRightPointResult.Value;
 
+            if (upperRightPoint.X <= lowerLeftPoint.X || upperRightPoint.Y <= lowerLeftPoint.Y)
+            {
+                editor.WriteMessage("Невалидни точки");
+
+                return;
+            }
+
             var crosses = MapGrid.GenerateCrosses(new Point(lowerLeftPoint.X, lowerLeftPoint.Y), new Point(upperRightPoint.X, upperRightPoint.Y), scale);
 
             using (Transaction transaction = database.TransactionManager.StartTransaction())
