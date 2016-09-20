@@ -1,13 +1,14 @@
 ﻿namespace MapGridCrossesGenerator
 {
+    using System.IO;
+    using System.Reflection;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
     using Autodesk.AutoCAD.Runtime;
+    using Helpers;
     using Map;
-    using System.IO;
-    using System.Reflection;
-
+    
     public class MapGridCrossesGenerator
     {
         [CommandMethod("DrawCrosses")]
@@ -16,35 +17,12 @@
             Database database = HostApplicationServices.WorkingDatabase;
             Editor editor = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument.Editor;
 
-            using (Database sourceDatabase = new Database(false, true))
-            {
-                string mapGridCrossFilePath = string.Format("{0}{1}Resources{1}Map_Grid_Cross.dwg", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Path.DirectorySeparatorChar);
+            string mapGridCrossFilePath = string.Format("{0}{1}Resources{1}Map_Grid_Cross.dwg", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Path.DirectorySeparatorChar);
+            string mapGridCrossBlockName = "MAP-GRID-CROSS";
 
-                sourceDatabase.ReadDwgFile(mapGridCrossFilePath, FileShare.ReadWrite, true, "");
+            BlockHelper.CopyBlockFromDwg(mapGridCrossBlockName, mapGridCrossFilePath, database);
 
-                ObjectIdCollection ids = new ObjectIdCollection();
-                using (Transaction sourceTransaction = sourceDatabase.TransactionManager.StartTransaction())
-                {
-                    BlockTable bt = (BlockTable)sourceTransaction.GetObject(sourceDatabase.BlockTableId, OpenMode.ForRead);
-
-                    if (bt.Has("MAP-GRID-CROSS"))
-                    {
-                        ids.Add(bt["MAP-GRID-CROSS"]);
-                    }
-
-                    sourceTransaction.Commit();
-                }
-
-                if (ids.Count != 0)
-                {
-                    IdMapping iMap = new IdMapping();
-
-                    database.WblockCloneObjects(ids, database.BlockTableId, iMap, DuplicateRecordCloning.Ignore, false);
-                }
-
-            }
-
-            PromptIntegerOptions promptIntegerOptions = new PromptIntegerOptions("Въведете мащаб: ")
+            PromptIntegerOptions promptScaleOptions = new PromptIntegerOptions("Въведете мащаб: ")
             {
                 DefaultValue = 1000,
                 AllowNegative = false,
@@ -53,46 +31,46 @@
                 AllowNone = false
             };
 
-            PromptIntegerResult promptIntegerResult = editor.GetInteger(promptIntegerOptions);
-            if (promptIntegerResult.Status != PromptStatus.OK)
+            PromptIntegerResult promptScaleResult = editor.GetInteger(promptScaleOptions);
+            if (promptScaleResult.Status != PromptStatus.OK)
             {
                 editor.WriteMessage("Невалиден мащаб");
 
                 return;
             }
 
-            int scale = promptIntegerResult.Value;
+            int scale = promptScaleResult.Value;
 
-            PromptPointOptions firstPointOptions = new PromptPointOptions("\nИзберете долен ляв ъгъл на картата: ");
+            PromptPointOptions promptLowerLeftPointOptions = new PromptPointOptions("\nИзберете долен ляв ъгъл на картата: ");
 
-            PromptPointResult firstPointResult = editor.GetPoint(firstPointOptions);
-            if (firstPointResult.Status != PromptStatus.OK)
+            PromptPointResult promptLowerLeftPointResult = editor.GetPoint(promptLowerLeftPointOptions);
+            if (promptLowerLeftPointResult.Status != PromptStatus.OK)
             {
                 editor.WriteMessage("Невалидна точка");
 
                 return;
             }
 
-            Point3d firstPoint = firstPointResult.Value;
+            Point3d lowerLeftPoint = promptLowerLeftPointResult.Value;
 
-            PromptPointOptions secondPointOptions = new PromptPointOptions("\nИзберете горен десен ъгъл на картата: ");
+            PromptPointOptions promptUpperRightPointOptions = new PromptPointOptions("\nИзберете горен десен ъгъл на картата: ");
 
-            PromptPointResult secondPointResult = editor.GetPoint(secondPointOptions);
-            if (secondPointResult.Status != PromptStatus.OK)
+            PromptPointResult promptUpperRightPointResult = editor.GetPoint(promptUpperRightPointOptions);
+            if (promptUpperRightPointResult.Status != PromptStatus.OK)
             {
                 editor.WriteMessage("Невалидна точка");
 
                 return;
             }
 
-            Point3d secondPoint = secondPointResult.Value;
+            Point3d upperRightPoint = promptUpperRightPointResult.Value;
 
-            var crosses = MapGrid.GenerateCrosses(new Map.Point(firstPoint.X, firstPoint.Y), new Map.Point(secondPoint.X, secondPoint.Y), scale);
+            var crosses = MapGrid.GenerateCrosses(new Point(lowerLeftPoint.X, lowerLeftPoint.Y), new Point(upperRightPoint.X, upperRightPoint.Y), scale);
 
             using (Transaction transaction = database.TransactionManager.StartTransaction())
             {
                 BlockTable blockTable = database.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
-                BlockTableRecord blockDefinition = blockTable["MAP-GRID-CROSS"].GetObject(OpenMode.ForWrite) as BlockTableRecord;
+                BlockTableRecord blockDefinition = blockTable[mapGridCrossBlockName].GetObject(OpenMode.ForWrite) as BlockTableRecord;
                 BlockTableRecord modelSpaceBlockTableRecord = blockTable[BlockTableRecord.ModelSpace].GetObject(OpenMode.ForWrite) as BlockTableRecord;
 
                 foreach (var cross in crosses)

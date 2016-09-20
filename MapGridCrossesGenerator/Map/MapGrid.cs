@@ -26,7 +26,7 @@
             {
                 for (int y = originY; y <= limitY; y += gridSize)
                 {
-                    Point cross = new Point(x,y);
+                    Point cross = new Point(x, y);
 
                     crosses.Add(cross);
                 }
