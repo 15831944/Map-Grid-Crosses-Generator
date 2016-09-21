@@ -11,16 +11,16 @@
 
             int gridSize = MapGrid.GetGridSizeByMapScale(scale);
 
-            int lowerLeftPointReductionX = (int)lowerLeftPoint.X % gridSize;
-            int lowerLeftPointReductionY = (int)lowerLeftPoint.Y % gridSize;
-            int upperRigthPointReductionX = (int)upperRightPoint.X % gridSize;
-            int upperRigthPointReductionY = (int)upperRightPoint.Y % gridSize;
+            int lowerLeftPointReductionX = lowerLeftPoint.X % gridSize;
+            int lowerLeftPointReductionY = lowerLeftPoint.Y % gridSize;
+            int upperRigthPointReductionX = upperRightPoint.X % gridSize;
+            int upperRigthPointReductionY = upperRightPoint.Y % gridSize;
 
-            int originX = (int)lowerLeftPoint.X - lowerLeftPointReductionX;
-            int originY = (int)lowerLeftPoint.Y - lowerLeftPointReductionY;
+            int originX = lowerLeftPoint.X - lowerLeftPointReductionX;
+            int originY = lowerLeftPoint.Y - lowerLeftPointReductionY;
 
-            int limitX = (int)upperRightPoint.X - upperRigthPointReductionX + gridSize;
-            int limitY = (int)upperRightPoint.Y - upperRigthPointReductionY + gridSize;
+            int limitX = upperRightPoint.X - upperRigthPointReductionX + gridSize;
+            int limitY = upperRightPoint.Y - upperRigthPointReductionY + gridSize;
 
             for (int x = originX; x <= limitX; x += gridSize)
             {

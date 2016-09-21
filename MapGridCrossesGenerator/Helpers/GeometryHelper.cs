@@ -14,9 +14,11 @@
 
         public static bool InsidePolygon(Polyline polygon, IPoint point)
         {
-            for (int vertexID = 0; vertexID < polygon.NumberOfVertices - 1; vertexID++)
+            int numberOfVertices = polygon.GetPoint2dAt(0) == polygon.GetPoint2dAt(polygon.NumberOfVertices - 1) ? polygon.NumberOfVertices - 1 : polygon.NumberOfVertices;
+
+            for (int vertexID = 0; vertexID < numberOfVertices; vertexID++)
             {
-                int nextVertexID = vertexID + 1;
+                int nextVertexID = vertexID + 1 == numberOfVertices ? 0 : vertexID + 1;
 
                 if (GeometryHelper.IsLeftSide(polygon.GetPoint2dAt(vertexID), polygon.GetPoint2dAt(nextVertexID), point))
                 {
