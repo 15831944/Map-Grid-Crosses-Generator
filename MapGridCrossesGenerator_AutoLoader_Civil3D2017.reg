@@ -1,0 +1,7 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Software\Autodesk\AutoCAD\R21.0\ACAD-0000:409\Applications\MapGridCrossesGenerator]
+"DESCRIPTION"="Map Grid Crosses Generator"
+"LOADCTRLS"=dword:00000002
+"MANAGED"=dword:00000001
+"LOADER"="D:\\n.geshkov\\Documents\\Map-Grid-Crosses-Generator\\MapGridCrossesGenerator\\bin\\Debug\\MapGridCrossesGenerator.dll"

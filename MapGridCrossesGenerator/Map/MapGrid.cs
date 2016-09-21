@@ -19,8 +19,8 @@
             int originX = (int)lowerLeftPoint.X - lowerLeftPointReductionX;
             int originY = (int)lowerLeftPoint.Y - lowerLeftPointReductionY;
 
-            int limitX = (int)upperRightPoint.X + upperRigthPointReductionX;
-            int limitY = (int)upperRightPoint.Y + upperRigthPointReductionY;
+            int limitX = (int)upperRightPoint.X - upperRigthPointReductionX + gridSize;
+            int limitY = (int)upperRightPoint.Y - upperRigthPointReductionY + gridSize;
 
             for (int x = originX; x <= limitX; x += gridSize)
             {

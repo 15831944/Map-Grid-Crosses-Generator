@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Contracts\IPoint.cs" />
     <Compile Include="Helpers\BlockHelper.cs" />
+    <Compile Include="Helpers\GeometryHelper.cs" />
     <Compile Include="MapGridCrossesGenerator.cs" />
     <Compile Include="Map\MapGrid.cs" />
     <Compile Include="Map\Point.cs" />
