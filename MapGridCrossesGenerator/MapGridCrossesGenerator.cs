@@ -6,7 +6,6 @@
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
     using Autodesk.AutoCAD.Runtime;
-    using Contracts;
     using Helpers;
     using Map;
 
@@ -56,22 +55,9 @@
             using (Transaction transaction = database.TransactionManager.StartTransaction())
             {
                 Polyline boundary = transaction.GetObject(promptBoundaryResult.ObjectId, OpenMode.ForRead) as Polyline;
-                IPoint[] boundaryPoints = new IPoint[boundary.NumberOfVertices];
-
-                editor.WriteMessage(boundary.NumberOfVertices.ToString() + "\n");
-
-                for (int i = 0; i < boundary.NumberOfVertices; i++)
-                {
-                    Point2d vertex = boundary.GetPoint2dAt(i);
-
-                    boundaryPoints[i] = new Point(vertex.X, vertex.Y);
-                }
 
                 Point3d lowerLeftPoint = boundary.Bounds.Value.MinPoint;
                 Point3d upperRightPoint = boundary.Bounds.Value.MaxPoint;
-
-                editor.WriteMessage(lowerLeftPoint.X + " " + lowerLeftPoint.Y + "\n");
-                editor.WriteMessage(upperRightPoint.X + " " + upperRightPoint.Y + "\n");
 
                 var crosses = MapGrid.GenerateCrosses(new Point(lowerLeftPoint.X, lowerLeftPoint.Y), new Point(upperRightPoint.X, upperRightPoint.Y), scale);
 
@@ -81,7 +67,7 @@
 
                 foreach (var cross in crosses)
                 {
-                    if (GeometryHelper.IsPointInsideSheet(boundary, cross))
+                    if (GeometryHelper.InsidePolygon(boundary, cross))
                     {
                         Point3d blockReferenceInsertPoint = new Point3d(cross.X, cross.Y, 0);
 
