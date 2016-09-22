@@ -59,7 +59,7 @@
                 Point3d lowerLeftPoint = boundary.Bounds.Value.MinPoint;
                 Point3d upperRightPoint = boundary.Bounds.Value.MaxPoint;
 
-                var crosses = MapGrid.GenerateCrosses(new Point(lowerLeftPoint.X, lowerLeftPoint.Y), new Point(upperRightPoint.X, upperRightPoint.Y), scale);
+                var crosses = MapGrid.GenerateCrosses(new BoundaryPoint(lowerLeftPoint.X, lowerLeftPoint.Y), new BoundaryPoint(upperRightPoint.X, upperRightPoint.Y), scale);
 
                 BlockTable blockTable = database.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
                 BlockTableRecord blockDefinition = blockTable[mapGridCrossBlockName].GetObject(OpenMode.ForWrite) as BlockTableRecord;
@@ -147,7 +147,7 @@
                 return;
             }
 
-            var crosses = MapGrid.GenerateCrosses(new Point(lowerLeftPoint.X, lowerLeftPoint.Y), new Point(upperRightPoint.X, upperRightPoint.Y), scale);
+            var crosses = MapGrid.GenerateCrosses(new BoundaryPoint(lowerLeftPoint.X, lowerLeftPoint.Y), new BoundaryPoint(upperRightPoint.X, upperRightPoint.Y), scale);
 
             using (Transaction transaction = database.TransactionManager.StartTransaction())
             {

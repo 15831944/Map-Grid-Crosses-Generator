@@ -59,12 +59,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\ICross.cs" />
     <Compile Include="Contracts\IPoint.cs" />
     <Compile Include="Helpers\BlockHelper.cs" />
     <Compile Include="Helpers\GeometryHelper.cs" />
     <Compile Include="MapGridCrossesGenerator.cs" />
+    <Compile Include="Map\BoundaryPoint.cs" />
     <Compile Include="Map\MapGrid.cs" />
-    <Compile Include="Map\Point.cs" />
+    <Compile Include="Map\Cross.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

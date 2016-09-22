@@ -2,8 +2,8 @@
 {
     public interface IPoint
     {
-        int X { get; }
+        double X { get; }
 
-        int Y { get; }
+        double Y { get; }
     }
 }

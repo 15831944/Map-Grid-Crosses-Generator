@@ -1,7 +1,6 @@
 ﻿namespace MapGridCrossesGenerator.Tests
 {
     using System;
-    using Autodesk.AutoCAD.Geometry;
     using Helpers;
     using Contracts;
     using NUnit.Framework;
@@ -13,9 +12,9 @@
         [TestCase(35, 15, false)]
         public void IsLeftSide_ShouldReturnCorrectResult(int x, int y, bool result)
         {
-            Point2d a = new Point2d(14.3429, 17.5163);
-            Point2d b = new Point2d(29.9575, 32.0665);
-            IPoint c = new Point(x, y);
+            IPoint a = new BoundaryPoint(14.3429, 17.5163);
+            IPoint b = new BoundaryPoint(29.9575, 32.0665);
+            ICross c = new Cross(x, y);
 
             Assert.AreEqual(result, GeometryHelper.IsLeftSide(a, b, c));
         }
