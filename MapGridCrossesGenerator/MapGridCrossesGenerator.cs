@@ -6,9 +6,10 @@
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
     using Autodesk.AutoCAD.Runtime;
+    using Contracts;
     using Helpers;
     using Map;
-
+    
     public class MapGridCrossesGenerator
     {
         [CommandMethod("DrawCrossesInPolygon")]
@@ -22,7 +23,7 @@
 
             BlockHelper.CopyBlockFromDwg(mapGridCrossBlockName, mapGridCrossFilePath, database);
 
-            PromptIntegerOptions promptScaleOptions = new PromptIntegerOptions("Въведете мащаб: ")
+            PromptIntegerOptions promptScaleOptions = new PromptIntegerOptions("\nВъведете мащаб: ")
             {
                 DefaultValue = 1000,
                 AllowNegative = false,
@@ -34,7 +35,7 @@
             PromptIntegerResult promptScaleResult = editor.GetInteger(promptScaleOptions);
             if (promptScaleResult.Status != PromptStatus.OK)
             {
-                editor.WriteMessage("Невалиден мащаб");
+                editor.WriteMessage("\nНевалиден мащаб");
 
                 return;
             }
@@ -42,7 +43,7 @@
             int scale = promptScaleResult.Value;
 
             PromptEntityOptions promptBoundaryOptions = new PromptEntityOptions("\nИзберете граница: ");
-            promptBoundaryOptions.SetRejectMessage("Изберете обекти от тип Polyline");
+            promptBoundaryOptions.SetRejectMessage("\nИзберете обект от тип Polyline");
             promptBoundaryOptions.AddAllowedClass(typeof(Polyline), true);
 
             PromptEntityResult promptBoundaryResult = editor.GetEntity(promptBoundaryOptions);
@@ -56,6 +57,15 @@
             {
                 Polyline boundary = transaction.GetObject(promptBoundaryResult.ObjectId, OpenMode.ForRead) as Polyline;
 
+                if (boundary.NumberOfVertices < 3)
+                {
+                    editor.WriteMessage("\nНевалидна граница");
+
+                    return;
+                }
+
+                IPoint[] polygon = GeometryHelper.InitializePolygonFromPolyline(boundary);
+
                 Point3d lowerLeftPoint = boundary.Bounds.Value.MinPoint;
                 Point3d upperRightPoint = boundary.Bounds.Value.MaxPoint;
 
@@ -67,7 +77,7 @@
 
                 foreach (var cross in crosses)
                 {
-                    if (GeometryHelper.InsidePolygon(boundary, cross))
+                    if (GeometryHelper.InsideComplexPolygon(polygon, cross))
                     {
                         Point3d blockReferenceInsertPoint = new Point3d(cross.X, cross.Y, 0);
 
@@ -97,7 +107,7 @@
 
             BlockHelper.CopyBlockFromDwg(mapGridCrossBlockName, mapGridCrossFilePath, database);
 
-            PromptIntegerOptions promptScaleOptions = new PromptIntegerOptions("Въведете мащаб: ")
+            PromptIntegerOptions promptScaleOptions = new PromptIntegerOptions("\nВъведете мащаб: ")
             {
                 DefaultValue = 1000,
                 AllowNegative = false,
@@ -109,7 +119,7 @@
             PromptIntegerResult promptScaleResult = editor.GetInteger(promptScaleOptions);
             if (promptScaleResult.Status != PromptStatus.OK)
             {
-                editor.WriteMessage("Невалиден мащаб");
+                editor.WriteMessage("\nНевалиден мащаб");
 
                 return;
             }
@@ -121,7 +131,7 @@
             PromptPointResult promptLowerLeftPointResult = editor.GetPoint(promptLowerLeftPointOptions);
             if (promptLowerLeftPointResult.Status != PromptStatus.OK)
             {
-                editor.WriteMessage("Невалидна точка");
+                editor.WriteMessage("\nНевалидна точка");
 
                 return;
             }
@@ -133,7 +143,7 @@
             PromptPointResult promptUpperRightPointResult = editor.GetPoint(promptUpperRightPointOptions);
             if (promptUpperRightPointResult.Status != PromptStatus.OK)
             {
-                editor.WriteMessage("Невалидна точка");
+                editor.WriteMessage("\nНевалидна точка");
 
                 return;
             }
@@ -142,7 +152,7 @@
 
             if (upperRightPoint.X <= lowerLeftPoint.X || upperRightPoint.Y <= lowerLeftPoint.Y)
             {
-                editor.WriteMessage("Невалидни точки");
+                editor.WriteMessage("\nНевалидни точки");
 
                 return;
             }
