@@ -1,6 +1,5 @@
 ﻿namespace MapGridCrossesGenerator.Tests
 {
-    using System;
     using Helpers;
     using Contracts;
     using NUnit.Framework;

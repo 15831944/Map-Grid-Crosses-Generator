@@ -10,9 +10,9 @@
         private static double[] constant;
         private static double[] multiple;
 
-        public static bool IsLeftSide(IPoint a, IPoint b, ICross c)
+        public static bool IsLeftSide(IPoint lineStartPoint, IPoint lineEndPoint, ICross point)
         {
-            return (((b.X - a.X) * (c.Y - a.Y)) - ((b.Y - a.Y) * (c.X - a.X))) > 0;
+            return (((lineEndPoint.X - lineStartPoint.X) * (point.Y - lineStartPoint.Y)) - ((lineEndPoint.Y - lineStartPoint.Y) * (point.X - lineStartPoint.X))) > 0;
         }
 
         public static bool InsidePolygon(Polyline polygon, ICross point)
@@ -26,10 +26,10 @@
                 Point2d currentVertex = polygon.GetPoint2dAt(vertexID);
                 Point2d nextVertex = polygon.GetPoint2dAt(nextVertexID);
 
-                BoundaryPoint a = new BoundaryPoint(currentVertex.X, currentVertex.Y);
-                BoundaryPoint b = new BoundaryPoint(nextVertex.X, nextVertex.Y);
+                BoundaryPoint lineStartPoint = new BoundaryPoint(currentVertex.X, currentVertex.Y);
+                BoundaryPoint lineEndPoint = new BoundaryPoint(nextVertex.X, nextVertex.Y);
 
-                if (GeometryHelper.IsLeftSide(a, b, point))
+                if (GeometryHelper.IsLeftSide(lineStartPoint, lineEndPoint, point))
                 {
                     return false;
                 }
@@ -38,7 +38,7 @@
             return true;
         }
 
-        public static IPoint[] InitializePolygonFromPolyline(Polyline polyline)
+        public static IPoint[] CreatePolygonFromPolyline(Polyline polyline)
         {
             IPoint[] polygon = new IPoint[polyline.NumberOfVertices];
 
@@ -48,7 +48,12 @@
 
                 polygon[vertexID] = new BoundaryPoint(vertex.X, vertex.Y);
             }
+            
+            return polygon;
+        }
 
+        public static void InitializePolygon(IPoint[] polygon)
+        {
             GeometryHelper.constant = new double[polygon.Length];
             GeometryHelper.multiple = new double[polygon.Length];
 
@@ -69,8 +74,6 @@
 
                 j = i;
             }
-
-            return polygon;
         }
 
         public static bool InsideComplexPolygon(IPoint[] polygon, ICross point)
@@ -80,7 +83,7 @@
 
             for (i = 0; i < polygon.Length; i++)
             {
-                if ((polygon[i].Y < point.Y && polygon[j].Y >= point.Y || polygon[j].Y < point.Y && polygon[i].Y >= point.Y))
+                if ((polygon[i].Y < point.Y && polygon[j].Y >= point.Y) || (polygon[j].Y < point.Y && polygon[i].Y >= point.Y))
                 {
                     insidePolygon ^= (point.Y * multiple[i] + constant[i] < point.X);
                 }

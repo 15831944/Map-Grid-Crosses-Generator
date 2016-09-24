@@ -64,7 +64,9 @@
                     return;
                 }
 
-                IPoint[] polygon = GeometryHelper.InitializePolygonFromPolyline(boundary);
+                IPoint[] polygon = GeometryHelper.CreatePolygonFromPolyline(boundary);
+
+                GeometryHelper.InitializePolygon(polygon);
 
                 Point3d lowerLeftPoint = boundary.Bounds.Value.MinPoint;
                 Point3d upperRightPoint = boundary.Bounds.Value.MaxPoint;
