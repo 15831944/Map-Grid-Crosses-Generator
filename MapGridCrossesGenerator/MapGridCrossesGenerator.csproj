@@ -48,13 +48,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="accoremgd, Version=21.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="AcCoreMgd, Version=20.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>ExternalLibraries\accoremgd.dll</HintPath>
+      <HintPath>D:\Downloads\Autodesk_ObjectARX_2016_Win_64_and_32_Bit\inc\AcCoreMgd.dll</HintPath>
     </Reference>
-    <Reference Include="acdbmgd, Version=21.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="acdbmgd, Version=20.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>ExternalLibraries\acdbmgd.dll</HintPath>
+      <HintPath>..\ExternalLibraries\acdbmgd.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -79,10 +79,6 @@
     <None Include="Resources\Map_Grid_Cross.dwg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ExternalLibraries\accoremgd.dll" />
-    <None Include="ExternalLibraries\acdbmgd.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
