@@ -12,6 +12,18 @@
     
     public class MapGridCrossesGenerator
     {
+        [CommandMethod("ExportCrosses")]
+        public static void ExportCrosses()
+        {
+
+        }
+
+        [CommandMethod("ImportCrosses")]
+        public static void ImportCrosses()
+        {
+
+        }
+
         [CommandMethod("DrawCrossesInPolygon")]
         public static void DrawCrossesInPolygon()
         {
