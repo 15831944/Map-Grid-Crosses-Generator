@@ -1,7 +1,9 @@
 ﻿namespace MapGridCrossesGenerator
 {
+    using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
+    using System.Windows.Forms;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
     using Autodesk.AutoCAD.Geometry;
@@ -9,7 +11,7 @@
     using Contracts;
     using Helpers;
     using Map;
-    
+
     public class MapGridCrossesGenerator
     {
         [CommandMethod("ExportCrosses")]
@@ -21,7 +23,51 @@
         [CommandMethod("ImportCrosses")]
         public static void ImportCrosses()
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text Files (*.txt)|*.txt|All files (*.*)|*.*";
 
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string path = openFileDialog.FileName;
+
+                ICollection<IPoint> crosses = FileHelper.ImportCrossesFromFile(path);
+
+                if (crosses.Count == 0)
+                {
+                    return;
+                }
+
+                Database database = HostApplicationServices.WorkingDatabase;
+                Editor editor = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument.Editor;
+
+                string mapGridCrossFilePath = string.Format("{0}{1}Resources{1}Map_Grid_Cross.dwg", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Path.DirectorySeparatorChar);
+                string mapGridCrossBlockName = "MAP-GRID-CROSS";
+
+                BlockHelper.CopyBlockFromDwg(mapGridCrossBlockName, mapGridCrossFilePath, database);
+
+                using (Transaction transaction = database.TransactionManager.StartTransaction())
+                {
+                    BlockTable blockTable = database.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
+                    BlockTableRecord blockDefinition = blockTable[mapGridCrossBlockName].GetObject(OpenMode.ForWrite) as BlockTableRecord;
+                    BlockTableRecord modelSpaceBlockTableRecord = blockTable[BlockTableRecord.ModelSpace].GetObject(OpenMode.ForWrite) as BlockTableRecord;
+
+                    foreach (var cross in crosses)
+                    {
+                        Point3d blockReferenceInsertPoint = new Point3d(cross.X, cross.Y, 0);
+
+                        using (BlockReference blockReference = new BlockReference(blockReferenceInsertPoint, blockDefinition.ObjectId))
+                        {
+                            blockReference.ScaleFactors = new Scale3d(1);
+
+                            modelSpaceBlockTableRecord.AppendEntity(blockReference);
+
+                            transaction.AddNewlyCreatedDBObject(blockReference, true);
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+            }
         }
 
         [CommandMethod("DrawCrossesInPolygon")]
