@@ -27,19 +27,18 @@
                 ObjectId[] blockReferenceIdCollection = BlockHelper.PromptForBlockSelection(editor, "Изберете координатни кръстове: ");
                 if (blockReferenceIdCollection == null)
                 {
-                    editor.WriteMessage("Невалидна селекция!");
+                    editor.WriteMessage("\nНевалидна селекция");
 
                     return;
                 }
 
-                string mapGridCrossBlockName = "MAP-GRID-CROSS";
                 StringBuilder output = new StringBuilder();
 
                 foreach (ObjectId blockReferenceId in blockReferenceIdCollection)
                 {
                     BlockReference blockReference = (BlockReference)transaction.GetObject(blockReferenceId, OpenMode.ForWrite);
 
-                    if (blockReference.Name != mapGridCrossBlockName)
+                    if (blockReference.Name != Cross.BlockName)
                     {
                         continue;
                     }
@@ -48,6 +47,8 @@
                 }
 
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All files (*.*)|*.*";
+
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     File.WriteAllText(saveFileDialog.FileName, output.ToString());
@@ -78,14 +79,13 @@
                 Editor editor = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument.Editor;
 
                 string mapGridCrossFilePath = string.Format("{0}{1}Resources{1}Map_Grid_Cross.dwg", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Path.DirectorySeparatorChar);
-                string mapGridCrossBlockName = "MAP-GRID-CROSS";
 
-                BlockHelper.CopyBlockFromDwg(mapGridCrossBlockName, mapGridCrossFilePath, database);
+                BlockHelper.CopyBlockFromDwg(Cross.BlockName, mapGridCrossFilePath, database);
 
                 using (Transaction transaction = database.TransactionManager.StartTransaction())
                 {
                     BlockTable blockTable = database.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
-                    BlockTableRecord blockDefinition = blockTable[mapGridCrossBlockName].GetObject(OpenMode.ForWrite) as BlockTableRecord;
+                    BlockTableRecord blockDefinition = blockTable[Cross.BlockName].GetObject(OpenMode.ForWrite) as BlockTableRecord;
                     BlockTableRecord modelSpaceBlockTableRecord = blockTable[BlockTableRecord.ModelSpace].GetObject(OpenMode.ForWrite) as BlockTableRecord;
 
                     foreach (var cross in crosses)
@@ -114,9 +114,8 @@
             Editor editor = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument.Editor;
 
             string mapGridCrossFilePath = string.Format("{0}{1}Resources{1}Map_Grid_Cross.dwg", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Path.DirectorySeparatorChar);
-            string mapGridCrossBlockName = "MAP-GRID-CROSS";
 
-            BlockHelper.CopyBlockFromDwg(mapGridCrossBlockName, mapGridCrossFilePath, database);
+            BlockHelper.CopyBlockFromDwg(Cross.BlockName, mapGridCrossFilePath, database);
 
             PromptIntegerOptions promptScaleOptions = new PromptIntegerOptions("\nВъведете мащаб: ")
             {
@@ -169,7 +168,7 @@
                 var crosses = MapGrid.GenerateCrosses(new BoundaryPoint(lowerLeftPoint.X, lowerLeftPoint.Y), new BoundaryPoint(upperRightPoint.X, upperRightPoint.Y), scale);
 
                 BlockTable blockTable = database.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
-                BlockTableRecord blockDefinition = blockTable[mapGridCrossBlockName].GetObject(OpenMode.ForWrite) as BlockTableRecord;
+                BlockTableRecord blockDefinition = blockTable[Cross.BlockName].GetObject(OpenMode.ForWrite) as BlockTableRecord;
                 BlockTableRecord modelSpaceBlockTableRecord = blockTable[BlockTableRecord.ModelSpace].GetObject(OpenMode.ForWrite) as BlockTableRecord;
 
                 foreach (var cross in crosses)
@@ -200,9 +199,8 @@
             Editor editor = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument.Editor;
 
             string mapGridCrossFilePath = string.Format("{0}{1}Resources{1}Map_Grid_Cross.dwg", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Path.DirectorySeparatorChar);
-            string mapGridCrossBlockName = "MAP-GRID-CROSS";
 
-            BlockHelper.CopyBlockFromDwg(mapGridCrossBlockName, mapGridCrossFilePath, database);
+            BlockHelper.CopyBlockFromDwg(Cross.BlockName, mapGridCrossFilePath, database);
 
             PromptIntegerOptions promptScaleOptions = new PromptIntegerOptions("\nВъведете мащаб: ")
             {
@@ -259,7 +257,7 @@
             using (Transaction transaction = database.TransactionManager.StartTransaction())
             {
                 BlockTable blockTable = database.BlockTableId.GetObject(OpenMode.ForRead) as BlockTable;
-                BlockTableRecord blockDefinition = blockTable[mapGridCrossBlockName].GetObject(OpenMode.ForWrite) as BlockTableRecord;
+                BlockTableRecord blockDefinition = blockTable[Cross.BlockName].GetObject(OpenMode.ForWrite) as BlockTableRecord;
                 BlockTableRecord modelSpaceBlockTableRecord = blockTable[BlockTableRecord.ModelSpace].GetObject(OpenMode.ForWrite) as BlockTableRecord;
 
                 foreach (var cross in crosses)

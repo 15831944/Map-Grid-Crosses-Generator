@@ -23,8 +23,8 @@
                         continue;
                     }
 
-                    double x = double.Parse(line[1]);
-                    double y = double.Parse(line[0]);
+                    double x = double.Parse(line[0]);
+                    double y = double.Parse(line[1]);
 
                     IPoint cross = new BoundaryPoint(x, y);
 
