@@ -1,8 +1,10 @@
 ﻿namespace MapGridCrossesGenerator
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
+    using System.Text;
     using System.Windows.Forms;
     using Autodesk.AutoCAD.DatabaseServices;
     using Autodesk.AutoCAD.EditorInput;
@@ -17,7 +19,42 @@
         [CommandMethod("ExportCrosses")]
         public static void ExportCrosses()
         {
+            Database database = HostApplicationServices.WorkingDatabase;
+            Editor editor = Autodesk.AutoCAD.ApplicationServices.Core.Application.DocumentManager.MdiActiveDocument.Editor;
 
+            using (Transaction transaction = database.TransactionManager.StartTransaction())
+            {
+                ObjectId[] blockReferenceIdCollection = BlockHelper.PromptForBlockSelection(editor, "Изберете координатни кръстове: ");
+                if (blockReferenceIdCollection == null)
+                {
+                    editor.WriteMessage("Невалидна селекция!");
+
+                    return;
+                }
+
+                string mapGridCrossBlockName = "MAP-GRID-CROSS";
+                StringBuilder output = new StringBuilder();
+
+                foreach (ObjectId blockReferenceId in blockReferenceIdCollection)
+                {
+                    BlockReference blockReference = (BlockReference)transaction.GetObject(blockReferenceId, OpenMode.ForWrite);
+
+                    if (blockReference.Name != mapGridCrossBlockName)
+                    {
+                        continue;
+                    }
+
+                    output.AppendFormat("{0} {1}{2}", blockReference.Position.X, blockReference.Position.Y, Environment.NewLine);
+                }
+
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    File.WriteAllText(saveFileDialog.FileName, output.ToString());
+                }
+
+                transaction.Commit();
+            }
         }
 
         [CommandMethod("ImportCrosses")]
