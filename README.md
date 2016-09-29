@@ -19,3 +19,11 @@ Map Grid Crosses Generator is an Autodesk® AutoCAD® add-in application that ma
 
  - Write More Tests
  - Add Code Comments
+
+### License
+
+Code by Nanko Geshkov. Copyright 2016 Nanko Geshkov [http://sixeightone.eu](http://sixeightone.eu)
+
+### Any questions, comments or additions?
+
+If you have a feature request or bug report, leave an issue on the [issues page](https://github.com/Nanich87/Map-Grid-Crosses-Generator/issues) or send a [pull request](https://github.com/Nanich87/Map-Grid-Crosses-Generator/pulls).
