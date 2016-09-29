@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MapGridCrossesGenerator")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Map Grid Crosses Generator for AutoCAD")]
+[assembly: AssemblyDescription("Map Grid Crosses Generator for AutoCAD")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MapGridCrossesGenerator")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("SixEightOne.eu")]
+[assembly: AssemblyProduct("Map Grid Crosses Generator")]
+[assembly: AssemblyCopyright("Copyright © 2016 by SixEightOne.eu")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: InternalsVisibleTo("MapGridCrossesGenerator.Tests")]
