@@ -48,13 +48,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AcCoreMgd, Version=20.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AcCoreMgd, Version=21.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Downloads\Autodesk_ObjectARX_2016_Win_64_and_32_Bit\inc\AcCoreMgd.dll</HintPath>
+      <HintPath>..\ExternalLibraries\2017\AcCoreMgd.dll</HintPath>
     </Reference>
-    <Reference Include="acdbmgd, Version=20.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AcDbMgd, Version=21.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ExternalLibraries\acdbmgd.dll</HintPath>
+      <HintPath>..\ExternalLibraries\2017\AcDbMgd.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
