@@ -4,9 +4,9 @@ Map Grid Crosses Generator is an Autodesk® AutoCAD® add-in application that ma
 
 ### Features
 
-- Generate crosses inside complex (self-intersecting) polygons
-- Import crosses from a file
-- Export crosses to a file
+- Generates crosses inside complex (self-intersecting) polygons
+- Imports crosses from a file
+- Exports crosses to a file
 
 ### Commands
 
