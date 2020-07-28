@@ -33,7 +33,7 @@ If you have a feature request or bug report, leave an issue on the [issues page]
 - git clone https://github.com/Nanich87/Map-Grid-Crosses-Generator.git
 - open MapGridCrossesGenerator.sln in Visual Studio or Mono Develop
 - right click on project MapGridCrossesGenerator -> Build
-- in AutoCAD type NETLOAD and select MapGridCrossesGenerator.dll (can be found in bin/Debug or bib/Release)
+- in AutoCAD type NETLOAD and select MapGridCrossesGenerator.dll (can be found in bin/Debug or bin/Release)
 
 ### Demo
 
