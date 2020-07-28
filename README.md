@@ -22,7 +22,7 @@ Map Grid Crosses Generator is an Autodesk® AutoCAD® add-in application that ma
 
 ### License
 
-Code by Nanko Geshkov. Copyright 2016 Nanko Geshkov [http://sixeightone.eu](http://sixeightone.eu)
+Code by Nanko Geshkov. Copyright © 2016-2020 Nanko Geshkov [https://discord.com/invite/8eSguT6](Discord)
 
 ### Any questions, comments or additions?
 
