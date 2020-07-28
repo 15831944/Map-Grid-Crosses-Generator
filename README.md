@@ -28,6 +28,13 @@ Code by Nanko Geshkov. Copyright © 2016-2020 Nanko Geshkov [https://discord.com
 
 If you have a feature request or bug report, leave an issue on the [issues page](https://github.com/Nanich87/Map-Grid-Crosses-Generator/issues) or send a [pull request](https://github.com/Nanich87/Map-Grid-Crosses-Generator/pulls).
 
+### How To Install
+
+- git clone https://github.com/Nanich87/Map-Grid-Crosses-Generator.git
+- open MapGridCrossesGenerator.sln in Visual Studio or Mono Develop
+- right click on project MapGridCrossesGenerator -> Build
+- in AutoCAD type NETLOAD and select MapGridCrossesGenerator.dll (can be found in bin/Debug or bib/Release)
+
 ### Demo
 
 [![Map Grid Crosses Generator](https://img.youtube.com/vi/0keqHmFkyTk/0.jpg)](https://www.youtube.com/watch?v=0keqHmFkyTk)
